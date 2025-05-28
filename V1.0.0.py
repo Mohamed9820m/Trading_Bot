@@ -1,27 +1,4 @@
-import MetaTrader5 as mt5
-import pandas as pd
-import numpy as np
-import talib
-import xgboost as xgb
-import json
-import os
-import logging
-import time
-import traceback
-from datetime import datetime, timedelta
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
-from concurrent.futures import ThreadPoolExecutor
-# Set up logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler("forex_scalper.log"),
-        logging.StreamHandler()
-    ]
-)
-logger = logging.getLogger("ForexScalper")
+
 
 class ForexScalpingBot:
     """
@@ -62,33 +39,7 @@ class ForexScalpingBot:
                  amd_pattern_accuracy_threshold=0.60  # 60% win rate requirement
                  
                  ):
-        """
-        Initialize the Forex Scalping Bot.
-        
-        Args:
-            symbols (list): List of forex pairs to trade
-            timeframe: MetaTrader timeframe constant
-            lot_size (float): Default size of trading lot if not using dynamic sizing
-            max_positions (int): Maximum number of open positions per symbol
-            profit_pips (float): Target profit in pips (used if not ATR-based)
-            stop_loss_pips (float): Stop loss in pips (used if not ATR-based)
-            mt5_directory (str): Path to MetaTrader 5 terminal executable
-            strategies_directory (str): Directory containing strategy files
-            models_directory (str): Directory for saving/loading models
-            backtest_data_period (int): Days of historical data for backtesting
-            live_trade (bool): Flag to enable live trading
-            login_id (int): MT5 account login ID
-            password (str): MT5 account password
-            server (str): MT5 server name
-            use_atr_stops (bool): Whether to use ATR for dynamic stop loss and take profit
-            atr_sl_multiplier (float): ATR multiplier for stop loss
-            atr_tp_multiplier (float): ATR multiplier for take profit
-            position_sizing_fraction (float): Fraction of account equity to risk per trade for dynamic position sizing
-            simulated_spread_pips (float): Spread in pips to simulate during backtesting
-            max_spread_pips_allowed (float): Maximum spread in pips allowed to open a new trade
-            signal_aggregation_method (str): Method to aggregate signals ("best_strategy_only", "best_strategy_or_all", "all_strategies_or", "voting")
-            min_votes_for_signal (int): Minimum votes required if aggregation is "voting"
-        """
+   
         # Default symbols if none provided
         self.symbols = symbols or ["EURUSD", "GBPUSD", "USDJPY", "AUDUSD", "USDCAD"]
         self.timeframe = timeframe
@@ -271,17 +222,7 @@ class ForexScalpingBot:
             return False
     
     def fetch_data(self, symbol, timeframe, bars=1000):
-        """
-        Fetch historical data for a symbol.
-        
-        Args:
-            symbol (str): Forex pair symbol
-            timeframe: MetaTrader timeframe constant
-            bars (int): Number of bars to fetch
-            
-        Returns:
-            DataFrame: Historical price data
-        """
+       
         if not self.connected:
             logger.error("Not connected to MetaTrader 5")
             return None
@@ -1333,16 +1274,7 @@ class ForexScalpingBot:
         return result if result is not None else np.zeros(len(df), dtype=bool)
 
     def _evaluate_pattern(self, df, rule):
-        """
-        Evaluate a candlestick pattern condition.
-        
-        Args:
-            df (DataFrame): Price data with indicators
-            rule (dict): Pattern condition rule
-            
-        Returns:
-            ndarray: Boolean array of condition results
-        """
+       
         pattern_type = rule.get('pattern_type', '')
         
         # Check if pattern exists as column (already calculated)
